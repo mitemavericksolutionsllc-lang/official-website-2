@@ -1,0 +1,269 @@
+/* ScrollAnimation.css */
+.scroll-container {
+  font-family: 'Inter', sans-serif;
+  color: #42a020;
+}
+
+/* Progressive Reveal Styles */
+.reveal-section {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-section.hidden {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.reveal-section.hidden.slide-up {
+  transform: translateY(100px);
+}
+
+.reveal-section.hidden.zoom-in {
+  transform: scale(0.9);
+}
+
+.reveal-section.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Parallax Styles */
+.parallax-section {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  will-change: transform;
+}
+
+.parallax-foreground {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 0 2px 4px rgb(205, 7, 7);
+}
+
+/* Image Zoom/Reveal Styles */
+.image-section {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  background: #f7fafc;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.image-container {
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(205, 3, 3, 0.1);
+}
+
+.zoom-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  transform: scale(0.8);
+  transition: transform 0.3s ease-out;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.mask-reveal {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transition: clip-path 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: clip-path;
+}
+
+.mask-reveal.visible {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Text Animation Styles */
+.text-animation-section {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  background: white;
+}
+
+.text-content {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.25rem;
+  line-height: 1.8;
+}
+
+.animated-paragraph {
+  margin-bottom: 2rem;
+  opacity: 0.3;
+  transition: all 0.5s ease;
+}
+
+.animated-paragraph.text-highlighted {
+  opacity: 1;
+}
+
+.word {
+  display: inline-block;
+  white-space: pre-wrap;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  transform: translateY(10px);
+}
+
+.text-highlighted .word {
+  animation: wordReveal 0.5s forwards;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes wordReveal {
+  0% {
+    opacity: 0.5;
+    transform: translateY(10px);
+    color: #666;
+    font-weight: 400;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    color: #2d3748;
+    font-weight: 600;
+  }
+}
+
+/* Color variation for second paragraph */
+.text-animation-section p:nth-child(2) .word {
+  animation-name: wordRevealAlt;
+}
+
+@keyframes wordRevealAlt {
+  0% {
+    opacity: 0.5;
+    transform: translateY(10px);
+    color: #666;
+    font-weight: 400;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    color: #4a5568;
+    font-weight: 700;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reveal-section,
+  .image-section,
+  .text-animation-section {
+    padding: 2rem 1rem;
+    min-height: 80vh;
+  }
+  
+  .image-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .text-content {
+    font-size: 1.1rem;
+  }
+}
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  z-index: 1000;
+}
+
+
+/* Modern CSS-only approach */
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-section {
+  animation: reveal linear both;
+  animation-timeline: view();
+  animation-range: entry 20% cover 40%;
+}
+
+/* Parallax with CSS */
+.parallax-background {
+  animation: parallax linear both;
+  animation-timeline: scroll();
+}
+
+@keyframes parallax {
+  to {
+    transform: translateY(calc(-100% * var(--parallax-speed, 0.5)));
+  }
+}
+
+/* Image zoom with CSS */
+.zoom-image {
+  animation: zoom linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 50%;
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

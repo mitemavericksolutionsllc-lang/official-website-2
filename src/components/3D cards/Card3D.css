@@ -1,0 +1,243 @@
+.card-3d-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.card-3d {
+  width: 100%;
+  max-width: 400px;
+  height: 500px;
+  border-radius: 24px;
+  position: relative;
+  transform-style: preserve-3d;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card-bg-layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    transparent 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.card-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  transform: translateZ(30px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(100, 150, 255, 0.3) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: translateZ(20px);
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card-description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.card-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+  transform: translateZ(10px);
+}
+
+.card-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
+.card-button.primary {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.card-button.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+.card-edge-glow {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-edge-glow.top {
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  animation: edgeGlow 3s infinite;
+}
+
+.card-edge-glow.bottom {
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  animation: edgeGlow 3s infinite 1.5s;
+}
+
+.card-edge-glow.left {
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  animation: edgeGlow 3s infinite 0.5s;
+}
+
+.card-edge-glow.right {
+  right: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  animation: edgeGlow 3s infinite 1s;
+}
+
+@keyframes edgeGlow {
+  0%, 100% {
+    opacity: 0;
+    transform: scaleX(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card-3d {
+    max-width: 350px;
+    height: 450px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+  
+  .card-buttons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-3d {
+    max-width: 300px;
+    height: 400px;
+    padding: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.3rem;
+  }
+  
+  .card-description {
+    font-size: 0.9rem;
+  }
+}
+
+/* Scroll progress indicator */
+.scroll-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.scroll-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  width: 0%;
+  transition: width 0.1s ease;
+}

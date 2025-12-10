@@ -1,0 +1,236 @@
+/* SectionStickyBackground.css */
+.section-sticky-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #333;
+}
+
+/* Introduction */
+.intro-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  background: #f8f9fa;
+}
+
+.intro-section h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.intro-section p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  opacity: 0.8;
+}
+
+/* SECTION-SPECIFIC STICKY BACKGROUND */
+.sticky-section-wrapper {
+  position: relative; /* REQUIRED for sticky positioning to work */
+  min-height: 200vh; /* Makes section tall enough for scrolling */
+  overflow: hidden;
+  margin: 100px 0; /* Space between sections */
+}
+
+/* This is the magic - background sticks only within parent section */
+.section-sticky-bg {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+.sticky-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.3s ease;
+}
+
+.sticky-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* Section Content - Scrolls over the sticky background */
+.section-content-container {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 20px;
+}
+
+.section-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.section-number {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--section-color);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 3rem;
+  color: white;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.section-body {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.section-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+.indicator-text {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.indicator-bar {
+  height: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.indicator-progress {
+  height: 100%;
+  width: 50%;
+  background: var(--section-color);
+  animation: progressScroll 2s ease-in-out infinite alternate;
+}
+
+@keyframes progressScroll {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Dummy Content */
+.dummy-content {
+  margin-top: 3rem;
+}
+
+.content-block {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 10px;
+  border-left: 4px solid var(--section-color);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.content-block h3 {
+  color: var(--section-color);
+  margin-bottom: 0.5rem;
+}
+
+.content-block p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Final Section */
+.final-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.final-section h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.final-section p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .intro-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .section-body {
+    padding: 2rem 1.5rem;
+  }
+  
+  .sticky-section-wrapper {
+    min-height: 150vh;
+  }
+}

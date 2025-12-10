@@ -1,0 +1,140 @@
+import React from "react";
+import {
+  useScrollAnimation,
+  useStaggerAnimation,
+  useShapeReveal,
+} from "../../hooks/useScrollAnimation";
+import "./About.css";
+
+
+const About = () => {
+  const [sectionRef2, isSectionVisible] = useScrollAnimation(0.1);
+  const [statsRef, visibleStats] = useStaggerAnimation(4, 0.2);
+  const [shapeRevealRef, revealProgress] = useShapeReveal(0.1);
+
+  const stats = [
+    { number: "50+", label: "Projects Completed", icon: "🚀" },
+    { number: "5+", label: "Years Experience", icon: "⭐" },
+    { number: "30+", label: "Happy Clients", icon: "😊" },
+    { number: "99%", label: "Success Rate", icon: "📈" },
+  ];
+
+  const getRevealClass = () => {
+    if (revealProgress < 0.3) return "";
+    if (revealProgress < 0.7) return "reveal-50";
+    return "reveal-100";
+  };
+
+  return (
+    <section id="about" className="about section" ref={sectionRef2}>
+      {/* Enhanced Animated Background Elements */}
+      <div className="animated-bg-elements">
+        <div className="floating-orb orb-1"></div>
+        <div className="floating-orb orb-2"></div>
+        <div className="floating-orb orb-3"></div>
+        <div className="glow-circle circle-1"></div>
+        <div className="glow-circle circle-2"></div>
+
+        {/* Floating Particles */}
+        <div className="floating-particle particle-1"></div>
+        <div className="floating-particle particle-2"></div>
+        <div className="floating-particle particle-3"></div>
+        <div className="floating-particle particle-4"></div>
+      </div>
+
+      {/* Shape Reveal Container */}
+      <div className="shape-reveal-container" ref={shapeRevealRef}>
+        <div className={`shape-background ${getRevealClass()}`}></div>
+      </div>
+
+      <div className="container">
+        {/* Fixed Section Header - No Animation Issues */}
+        <div className="section-header-fixed">
+          <h2 className="section-title-fixed">
+            About <span className="gradient-text">Nano Nexus</span>
+          </h2>
+          <p className="section-subtitle-About">
+            Pioneering the Future of Digital Innovation
+          </p>
+          <div className="section-divider"></div>
+        </div>
+
+        <div className="about-content">
+          <div className="about-main">
+            <div
+              className={`about-text shape-reveal ${
+                isSectionVisible ? "visible" : ""
+              }`}
+            >
+              {/* lightning the About section */}
+              {/* <div className="light-beam"></div> */}
+              <h3>
+                Transforming Ideas Into{" "}
+                <span className="highlight-text">Digital Excellence</span>
+              </h3>
+              <p>
+                At <strong>Nano Nexus</strong>, we are more than just a software
+                development company. We are your strategic partner in digital
+                transformation, combining cutting-edge technology with
+                innovative thinking to create solutions that drive real business
+                value.
+              </p>
+              <p>
+                Founded with a vision to bridge the gap between complex business
+                challenges and elegant technological solutions, our team of
+                expert developers, designers, and strategists work
+                collaboratively to deliver exceptional results.
+              </p>
+              <div className="hero-content">
+                {/* TextAnimation content */}
+              </div>
+
+              <div className="mission-vision">
+                <div className="mission-card glass-card glass-card-primary">
+                  <h4>🎯 Our Mission</h4>
+                  <p>
+                    To empower businesses with innovative software solutions
+                    that drive growth, efficiency, and digital transformation.
+                  </p>
+                  <div className="corner-glow top-left"></div>
+                  <div className="corner-glow bottom-right"></div>
+                </div>
+                <div className="vision-card glass-card glass-card-secondary">
+                  <h4>🔭 Our Vision</h4>
+                  <p>
+                    To be the leading force in creating a digitally transformed
+                    world where technology enhances every aspect of business.
+                  </p>
+                  <div className="corner-glow top-left"></div>
+                  <div className="corner-glow bottom-right"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Grid with Staggered Animation */}
+            <div className="stats-section" ref={statsRef}>
+              <h4 className="shape-reveal">Our Impact in Numbers</h4>
+              <div className="stats-grid">
+                {stats.map((stat, index) => (
+                  <div
+                    key={index}
+                    className={`stat-item glass-card glass-card-glow stagger-item ${
+                      visibleStats.includes(index) ? "visible" : ""
+                    } stagger-delay-${index + 1}`}
+                  >
+                    <div className="stat-icon">{stat.icon}</div>
+                    <span className="stat-number">{stat.number}</span>
+                    <span className="stat-label">{stat.label}</span>
+                    <div className="stat-glow"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
