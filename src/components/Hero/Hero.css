@@ -6,7 +6,7 @@
   justify-content: center;
   padding: 0 5%;
   position: relative;
-  background: transparent; 
+  background: transparent;
 }
 
 .zenith-main-layout {
@@ -37,7 +37,7 @@
 .zenith-typewriter-container {
   display: inline-flex;
   align-items: center;
-  min-width: 320px;  
+  min-width: 320px;
   height: 1.2em;
   vertical-align: bottom;
   user-select: none;
@@ -48,7 +48,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   white-space: nowrap;
-  will-change: content; 
+  will-change: content;
 }
 
 .zenith-typewriter-cursor {
@@ -58,17 +58,22 @@
   height: 1.1em;
   background-color: var(--accent-1);
   /* Use a transform-based blink for better performance than opacity */
-  animation: zenithBlink 1s step-end infinite;  
+  animation: zenithBlink 1s step-end infinite;
 }
 
 @keyframes zenithBlink {
- 0%, 100% { visibility: visible; }
-  50% { visibility: hidden; }
- }
+  0%,
+  100% {
+    visibility: visible;
+  }
+  50% {
+    visibility: hidden;
+  }
+}
 
 .zenith-sub-text {
   font-size: 1.1rem;
-  color: var(--text-secondary); /* Changed to white per your request */
+  color: var(--text-secondary);
   opacity: 0.8;
   max-width: 500px;
   margin-bottom: 2.5rem;
@@ -83,7 +88,6 @@
   padding: 1.1rem 2.6rem;
   font-size: 1.1rem;
   font-weight: 600;
-  border-radius: 12px;
   background: var(--gradient-buttons-bg);
   color: var(--text-secondary);
   transition: 0.4s ease;
@@ -96,8 +100,12 @@
   box-shadow: 0 15px 30px rgba(38, 170, 135, 0.3);
 }
 
-.zenith-btn-arrow { transition: 0.3s ease; }
-.zenith-cta-btn:hover .zenith-btn-arrow { transform: translateX(6px); }
+.zenith-btn-arrow {
+  transition: 0.3s ease;
+}
+.zenith-cta-btn:hover .zenith-btn-arrow {
+  transform: translateX(6px);
+}
 
 /* --- Social Icons (Transparent with Your Border) --- */
 .zenith-social-wrapper {
@@ -159,7 +167,8 @@
   background: transparent;
 }
 
-.zenith-img-fluid, .zenith-video-fluid {
+.zenith-img-fluid,
+.zenith-video-fluid {
   width: 100%;
   height: auto;
   background: transparent;
@@ -173,16 +182,32 @@
     padding-top: 60px;
   }
 
-  .zenith-text-block { order: 2; }
-  .zenith-media-block { order: 1; margin-bottom: 2rem; }
+  .zenith-text-block {
+    order: 2;
+  }
+  .zenith-media-block {
+    order: 1;
+    margin-bottom: 2rem;
+  }
 
-  .zenith-sub-text { margin: 0 auto 2.5rem; }
-  .zenith-social-grid, .zenith-action-area { justify-content: center; }
+  .zenith-sub-text {
+    margin: 0 auto 2.5rem;
+  }
+  .zenith-social-grid,
+  .zenith-action-area {
+    justify-content: center;
+  }
 }
 
 @keyframes zenithFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .zenith-scroll-down {
@@ -197,9 +222,8 @@
   height: 40px;
   background: linear-gradient(to bottom, var(--accent-1), transparent);
 }
- 
 
- /* --- Breakpoint: 768px (Tablets) --- */
+/* --- Breakpoint: 768px (Tablets) --- */
 @media (max-width: 768px) {
   .zenith-main-layout {
     grid-template-columns: 1fr;
@@ -207,8 +231,13 @@
     gap: 1.5rem;
   }
 
-  .zenith-text-block { order: 2; }
-  .zenith-media-block { order: 1; margin-bottom: 1rem; }
+  .zenith-text-block {
+    order: 2;
+  }
+  .zenith-media-block {
+    order: 1;
+    margin-bottom: 1rem;
+  }
 
   .zenith-main-title {
     font-size: 2.5rem;
@@ -219,7 +248,7 @@
     margin: 0 auto 2rem; /* Centers the subtitle for both languages */
   }
 
-  .zenith-social-grid, 
+  .zenith-social-grid,
   .zenith-action-area {
     justify-content: center;
   }
@@ -249,13 +278,18 @@
   .zenith-main-title {
     font-size: 2rem;
   }
-  
+
   /* Reduce the offset on smaller screens to prevent clipping */
-  .zenith-ltr .zenith-typewriter-text, .zenith-ltr .zenith-typewriter-cursor { right: 20px; }
-  .zenith-rtl .zenith-typewriter-text, .zenith-rtl .zenith-typewriter-cursor { left: 20px; }
-  
+  .zenith-ltr .zenith-typewriter-text,
+  .zenith-ltr .zenith-typewriter-cursor {
+    right: 20px;
+  }
+  .zenith-rtl .zenith-typewriter-text,
+  .zenith-rtl .zenith-typewriter-cursor {
+    left: 20px;
+  }
+
   .zenith-cta-btn {
-   
     padding: 0.9rem 1.5rem;
   }
 }
@@ -267,7 +301,8 @@
   }
 
   /* Remove offsets entirely on tiny screens to avoid horizontal overflow */
-  .zenith-typewriter-text, .zenith-typewriter-cursor {
+  .zenith-typewriter-text,
+  .zenith-typewriter-cursor {
     right: 0 !important;
     left: 0 !important;
   }
@@ -278,15 +313,94 @@
   }
 }
 
+[dir="rtl"] .zenith-btn-arrow {
+  transform: rotate(180deg);
+  transition: 0.3s ease;
+}
 
-  [dir="rtl"] .zenith-btn-arrow {
-    transform: rotate(180deg);
-    transition: 0.3s ease;
-  }
+[dir="rtl"] .zenith-cta-btn:hover .zenith-btn-arrow {
+  transform: rotate(180deg) translateX(6px);
+}
 
-  [dir="rtl"] .zenith-cta-btn:hover .zenith-btn-arrow {
-    transform: rotate(180deg) translateX(6px);
-  }
+/* model for whatsapp and telegram */
 
- 
- 
+/* --- Modal Styles --- */
+.zenith-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: zenithFadeIn 0.3s ease;
+}
+
+.zenith-modal-content {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 15px;
+  border: 1px solid var(--accent-1);
+  text-align: center;
+  min-width: 300px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.zenith-modal-content h3 {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.zenith-contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: #262626;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.zenith-flag {
+  font-size: 1.5rem;
+}
+
+.zenith-number {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+
+.zenith-copy-btn {
+  background: var(--accent-1);
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.zenith-copy-btn:hover {
+  filter: brightness(1.2);
+}
+
+.zenith-close-modal {
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.zenith-close-modal:hover {
+  color: white;
+  border-color: white;
+}

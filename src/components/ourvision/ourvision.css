@@ -45,6 +45,7 @@
   overflow: hidden;
   transition: flex 2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s ease;
   border: 1px solid var(--border-color);
+  
   transition: 
     flex 2s cubic-bezier(0.16, 1, 0.3, 1), 
     transform 0.4s ease,

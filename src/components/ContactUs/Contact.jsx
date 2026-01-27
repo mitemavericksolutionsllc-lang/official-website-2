@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./Contact.css";
-import { useLanguage } from "../../context/LanguageContext"; 
+import { useLanguage } from "../../context/LanguageContext";
 import en from "../../locales/en/contact.json";
 import ar from "../../locales/ar/contact.json";
+
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
   const { language } = useLanguage();
@@ -17,6 +19,7 @@ const Contact = () => {
 
   const [errors, setErrors] = useState({});
   const [isSending, setIsSending] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,39 +44,78 @@ const Contact = () => {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  // ... inside the Contact component ...
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     setIsSending(true);
 
-    try {
-      const response = await fetch("http://localhost:5000/send-contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    // Reference your .env variables
+    const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+    const templateId = process.env.REACT_APP_CONTACT_US_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
-      if (response.ok) {
-        alert(t.success);
-        setFormData({ name: "", email2: "", subject: "", message: "" });
-        setErrors({});
-      } else {
-        alert(t.error);
-      }
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email2,
+          subject: formData.subject,
+          message: formData.message,
+          to_name: "Mite Maverick Admin",
+        },
+        publicKey
+      );
+
+      setIsSubmitted(true);
+      setFormData({ name: "", email2: "", subject: "", message: "" });
     } catch (error) {
-      console.error("Error:", error);
-      alert(t.error);
+      console.error("Contact Form Error:", error);
+      alert(language === "ar" ? "فشل الإرسال" : "Submission failed");
     } finally {
       setIsSending(false);
     }
   };
 
-  return (
-    <section id="contact" className={`contact-section ${language === "ar" ? "rtl" : ""}`}>
-      <div className="orbit-header">
-        <h1 className="orbit-main-title"> {t.title} <span>{t.titleSpan}</span> </h1>
+  if (isSubmitted) {
+    return (
+      <div className="submission-success-overlay">
+        <div className="submission-success-card">
+          <div className="success-icon-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h2>{language === "ar" ? "شكراً لك!" : "Thank You!"}</h2>
+          <p>
+            {language === "ar"
+              ? "لقد تم استلام طلبك بنجاح. سيتواصل معك فريقنا قريباً."
+              : "Your request has been received successfully. Our team will contact you shortly."}
+          </p>
+          <button onClick={() => setIsSubmitted(false)} className="success-back-btn">
+            {language === "ar" ? "إرسال طلب جديد" : "Submit New Request"}
+          </button>
+        </div>
       </div>
-      
+    );
+  }
+
+  return (
+    <section
+      id="contact"
+      className={`contact-section ${language === "ar" ? "rtl" : ""}`}
+    >
+      <div className="orbit-header">
+        <h1 className="orbit-main-title">
+          {" "}
+          {t.title} <span>{t.titleSpan}</span>{" "}
+        </h1>
+      </div>
+
       <div className="contact-container">
         <div className="contact-info">
           <h1 className="hero-text">
@@ -100,7 +142,9 @@ const Contact = () => {
                   onChange={handleChange}
                   className={errors.name ? "input-error" : ""}
                 />
-                {errors.name && <span className="error-text">{errors.name}</span>}
+                {errors.name && (
+                  <span className="error-text">{errors.name}</span>
+                )}
               </div>
               <div className="form-group">
                 <input
@@ -111,7 +155,9 @@ const Contact = () => {
                   onChange={handleChange}
                   className={errors.email2 ? "input-error" : ""}
                 />
-                {errors.email2 && <span className="error-text">{errors.email2}</span>}
+                {errors.email2 && (
+                  <span className="error-text">{errors.email2}</span>
+                )}
               </div>
             </div>
 
@@ -124,7 +170,9 @@ const Contact = () => {
                 onChange={handleChange}
                 className={errors.subject ? "input-error" : ""}
               />
-              {errors.subject && <span className="error-text">{errors.subject}</span>}
+              {errors.subject && (
+                <span className="error-text">{errors.subject}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -136,12 +184,17 @@ const Contact = () => {
                 onChange={handleChange}
                 className={errors.message ? "input-error" : ""}
               ></textarea>
-              {errors.message && <span className="error-text">{errors.message}</span>}
+              {errors.message && (
+                <span className="error-text">{errors.message}</span>
+              )}
             </div>
 
             <div className="form-footer">
-              <p className="privacy-text">{t.privacy}</p>
-              <button type="submit" className="submit-btn-contact" disabled={isSending}>
+              <button
+                type="submit"
+                className="submit-btn-contact"
+                disabled={isSending}
+              >
                 {isSending ? t.buttonSending : t.button}
               </button>
             </div>

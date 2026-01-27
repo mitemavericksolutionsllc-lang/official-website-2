@@ -142,7 +142,7 @@ export default function OrbitServices() {
     cardWidth = 420;
     gap = 80;
   }
-  
+
   const step = cardWidth + gap;
   const currentTranslation = -(activeIndex * step);
 
@@ -245,7 +245,7 @@ export default function OrbitServices() {
                         <h3 
                           className="orbit-title" 
                           style={{ 
-                            textAlign: language === 'ar' ? 'right' : 'left',
+                           textAlign: 'center',
                             direction: language === 'ar' ? 'rtl' : 'ltr'
                           }}
                         >

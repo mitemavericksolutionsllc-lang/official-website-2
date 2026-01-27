@@ -38,7 +38,23 @@
 .mm-social-wrapper {
   display: flex;
   gap: 15px;
-  justify-content: center; 
+  justify-content: center;
+}
+
+.mm-social-icon:hover .Instagram-image{
+  filter: brightness(0); /* Black icon on teal background */
+}
+
+.mm-social-icon:hover .WhatsApp-image{
+  filter: brightness(0); /* Black icon on teal background */
+}
+
+.mm-social-icon:hover .Facebook-image{
+  filter: brightness(0); /* Black icon on teal background */
+}
+
+.mm-social-icon:hover .Telegram-image{
+  filter: brightness(0); /* Black icon on teal background */
 }
 
 .mm-social-icon {
@@ -47,7 +63,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 12px;  
+  border-radius: 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
@@ -90,16 +106,9 @@
 /* Responsive adjustment */
 @media (max-width: 600px) {
   .mm-top-section {
-    
     gap: 20px;
   }
 }
-
-
-
-
-
-
 
 /* ... Keep your existing desktop styles above ... */
 
@@ -130,6 +139,8 @@
   .mm-logo-img {
     height: 35px; /* Slightly smaller logo */
     margin: 0 auto;
+    position: relative;
+    left: 20px;
   }
 
   .mm-social-wrapper {
@@ -144,7 +155,7 @@
   }
 
   .mm-social-icon {
-    width: 35px;  /* Smaller touch targets to fit width */
+    width: 35px; /* Smaller touch targets to fit width */
     height: 35px;
   }
 
@@ -158,17 +169,71 @@
   }
 }
 
+/* Popup Modal Styles */
+.mm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
 
+.mm-modal-content {
+  background: var(--bg-secondary);
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid var(--accent-1);
+  text-align: center;
+  min-width: 280px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
 
+.mm-contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+}
 
+.mm-flag {
+  font-size: 1.5rem;
+}
 
+.mm-number {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
 
+.mm-copy-btn {
+  background: var(--accent-1);
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
 
+.mm-copy-btn:hover {
+  opacity: 0.8;
+}
 
-
-
-
-
-
-
-
+.mm-close-btn {
+  background: transparent;
+  border: 1px solid var(--text-primary);
+  color: var(--text-primary);
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}

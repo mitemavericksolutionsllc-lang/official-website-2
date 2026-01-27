@@ -32,12 +32,12 @@
   bottom: 90px;
 }
 
-  [dir="rtl"] .contact-info {
-      position: relative;
-  bottom: -5px;
-
+  [dir="rtl"] .contact-info .hero-text {
+  position: relative;
+  bottom: -50px;
+  font-family: var(--font-arabic);
+  font-size: 90px;
   }
-
 
 /* Typography */
 .contact-info .hero-text {
@@ -149,6 +149,92 @@
   }
 
 
+
+
+  /* Container to center the success message */
+.submission-success-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Glassmorphism Card */
+.submission-success-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--accent-1);
+  border-radius: 24px;
+  padding: 50px 30px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated Checkmark Circle */
+.success-icon-circle {
+  width: 80px;
+  height: 80px;
+  background: var(--accent-1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 25px;
+  color: #000;
+  box-shadow: 0 0 20px rgba(38, 170, 135, 0.4);
+}
+
+.success-icon-circle svg {
+  width: 40px;
+  height: 40px;
+}
+
+.submission-success-card h2 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+}
+
+.submission-success-card p {
+  color: #a0a0a0;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* Back Button Styling */
+.success-back-btn {
+  background: transparent;
+  border: 1px solid var(--accent-1);
+  color: var(--accent-1);
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.success-back-btn:hover {
+  background: var(--accent-1);
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Entry Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RTL Support for Arabic */
+.rtl .submission-success-card {
+  direction: rtl;
+}
 
 
 

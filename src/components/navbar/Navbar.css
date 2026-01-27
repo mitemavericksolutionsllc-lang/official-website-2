@@ -1,9 +1,3 @@
- 
-
-/* ==============================
-   MAIN NAVIGATION
-   ============================== */
- 
 
 .logo-nav {
   direction: ltr !important; 
@@ -23,27 +17,65 @@
   /* CRITICAL: Removed overflow: hidden to allow the menu to drop down */
 }
 
-/* Navbar when scrolled - SHRINK TO CENTER EFFECT */
 .logo-nav.scrolled {
-  height: 70px;
+  font-size: 50px;
   background: var(--logo-nav-background);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  transform: scale(0.92);
   border-radius: 0 0 20px 20px;
   margin: 0 auto;
-  width: 96%;
-  max-width: 1300px;
-  padding: 0 15px;
   animation: navbarShrink 0.8s ease-out forwards;
-  transition: 1s cubic-bezier(0.4, 0, 0.2, 1);  ;
+  transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+  [dir="rtl"] .logo-nav.scrolled {
+   font-size: 70px;
+  }
+
 .logo-nav:not(.scrolled) {
-  animation: navbarExpand 0.5s ease-out forwards;
+  animation: navbarExpand 1s ease-out forwards;
 }
+
+/* ==============================
+   ANIMATIONS
+   ============================== */
+
+   :root {
+  --nav-shrink-scale: 0.72;
+  --nav-expand-scale: 1;
+  /* Using a custom bezier for a "slick" feel */
+  --smooth-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes navbarShrink {
+  from {
+    transform: scale(1);
+    border-radius: 0;
+  
+  }
+  to {
+    /* ScaleX handles the width change smoothly without triggering layout reflow */
+    transform: scale(var(--nav-shrink-scale));
+    border-radius: 0 0 24px 24px;
+ 
+  }
+}
+
+@keyframes navbarExpand {
+  from {
+    transform: scale(var(--nav-shrink-scale));
+    border-radius: 0 0 24px 24px;
+ 
+  }
+  to {
+    transform: scale(var(--nav-expand-scale));
+    border-radius: 0;
+   
+  }
+}
+
 
 /* ==============================
    NAVIGATION INNER CONTAINER
@@ -55,15 +87,14 @@
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2.5rem;
   position: relative;
-  flex-direction: row !important; 
+  flex-direction: row !important;
+  transition: 1s ease-out;
 }
 
 .logo-nav.scrolled .nav-inner {
-  padding: 0 2rem;
   max-width: 1300px;
 }
 
@@ -77,6 +108,8 @@
   gap: 12px;
   position: relative;
   transition: var(--transition-smooth);
+  min-width: 200px; /* Prevents shifting when scrolled/changed */
+  padding: 10px;
 }
 
 .logo-box {
@@ -84,20 +117,14 @@
   overflow: hidden;
   cursor: pointer;
 }
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
 
 .logo-page {
   max-width: 200px;
   max-height: 200px;
-  position: relative;
-  left: 50px;
-  transition: all 0.5s ease;
-}
-
-.logo-nav.scrolled .logo-page {
-  max-width: 160px;
-  max-height: 160px;
-  left: 40px;
-  transform: scale(0.9);
 }
 
 /* ==============================
@@ -111,8 +138,6 @@
   transition: var(--transition-smooth);
   flex-direction: row !important;
 }
-
- 
 
 .logo-nav.scrolled .nav-links-wrapper {
   gap: 1.8rem;
@@ -140,14 +165,12 @@
   }
 
 .logo-nav.scrolled .nav-button {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 /* Active and Hover States */
 .nav-button.active {
   color: #1e8f75;
-  background: linear-gradient(90deg, rgba(30, 143, 117, 0.1) 0%, transparent 100%);
-  border-top-left-radius: 20px;
   letter-spacing: 0.5px;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -240,8 +263,6 @@
   cursor: pointer;
 }
 
- 
-
 .mobile-menu-button.active {
   color: var(--nav-active);
   font-weight: 700;
@@ -262,140 +283,23 @@
   }
 
  .logo-section{
-  display: none;
+    display: flex; /* Keep logo visible if you want it still */
+    min-width: auto;
  }
 
   .logo-nav.scrolled {
     height: 65px;
+    padding: 20px;
   }
 
   /* Ensure container doesn't clip children */
   .nav-inner {
     overflow: visible;
+        justify-content: space-between; /* Keeps logo left and icons right */
+
   }
-}
 
-/* ==============================
-   ANIMATIONS
-   ============================== */
-
-@keyframes navbarShrink {
-  from { transform: scale(1); width: 100%; border-radius: 0; }
-  to { transform: scale(0.92); width: 96%; border-radius: 0 0 20px 20px; }
-}
-
-@keyframes navbarExpand {
-  from { transform: scale(0.92); width: 96%; border-radius: 0 0 20px 20px; }
-  to { transform: scale(1); width: 100%; border-radius: 0; }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ==============================
-   LANGUAGE SWITCHER STYLES (NEW)
-   ============================== */
-
-.lang-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
-
-.lang-toggle {
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  padding: 8px;
-  z-index: 1005;
-  transition: transform 0.3s ease;
-}
-
-.lang-container.open .lang-toggle {
-  transform: scale(1.1);
-  color: var(--accent-1);
-}
-
-.lang-current-code {
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-/* New Dropdown Animation Box */
-.lang-options-wrapper {
-  position: absolute;
-  top: 120%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-10px) scale(0.95);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
-}
-
-.lang-container.open .lang-options-wrapper {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0) scale(1);
-}
-
-.lang-options {
-  background: var(--glass-bg);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border);
-  padding: 6px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.lang-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.lang-btn.active {
-  background: var(--accent-1);
-  color: white;
-}
-
-.lang-btn:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.lang-divider {
-  width: 1px;
-  height: 15px;
-  background: var(--glass-border);
-}
-
-/* Mobile Specific Adjustment */
-@media (max-width: 768px) {
-  .lang-container {
+    .lang-container {
     margin-right: 5px;
   }
   
@@ -408,7 +312,33 @@
   .lang-container.open .lang-options-wrapper {
     transform: translateY(0) scale(1);
   }
+
+    .lang-dropdown {
+    left: auto;
+    right: 0;
+    transform: translateY(10px);
+  }
+  
+  .lang-container.open .lang-dropdown {
+    transform: translateY(0);
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
 
 
 
@@ -418,14 +348,7 @@
    ============================== */
 
 /* Ensure the logo section container has a stable width/position */
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: relative;
-  transition: var(--transition-smooth);
-  min-width: 200px; /* Prevents shifting when scrolled/changed */
-}
+
 
 /* Fix for the language switcher layout shift */
 .lang-current-code {
@@ -457,6 +380,7 @@
 /* New Modern Dropdown Animation */
 .lang-dropdown {
   position: absolute;
+  width: 100%;
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
@@ -499,47 +423,90 @@
 }
 
 /* Mobile Fixes: Keeping things still */
-@media (max-width: 768px) {
-  .logo-section {
-    display: flex; /* Keep logo visible if you want it still */
-    min-width: auto;
-  }
-  
-  .nav-inner {
-    justify-content: space-between; /* Keeps logo left and icons right */
-  }
 
-  .lang-dropdown {
-    left: auto;
-    right: 0;
-    transform: translateY(10px);
-  }
-  
-  .lang-container.open .lang-dropdown {
-    transform: translateY(0);
-  }
+
+
+
+
+
+
+
+
+/* Container for the button and its dropdown */
+.nav-item-container {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
+.dropdown-caret {
+  font-size: 0.7rem;
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
 
+/* Dropdown Menu Design */
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(15px); /* Start lower for slide effect */
+  background: var(--glass-bg, #ffffff);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.1));
+ 
+  min-width: 160px;
+  padding: 8px 0;
+  list-style: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  
+  /* Animation Logic */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  pointer-events: none;
+  z-index: 1100;
+}
 
+/* Show on Hover */
+.has-dropdown:hover .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
 
+.has-dropdown:hover .dropdown-caret {
+  transform: rotate(180deg);
+}
 
+/* Dropdown Individual Buttons */
+.nav-dropdown-menu li button {
+  width: 100%;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+  color: var(--text-primary, #333);
+  font-size: 1.2rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
+.nav-dropdown-menu li button:hover {
+  background: rgba(30, 143, 117, 0.1); /* Light version of your active color */
+  color: var(--text-secondary);
+  padding-left: 25px; /* Subtle slide effect on hover */
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Add/Update these rules in Navbar.css */
+/* Mobile Fix: Ensure dropdown doesn't break desktop layout */
+@media (max-width: 768px) {
+  .nav-dropdown-menu {
+    display: none; /* We handle mobile differently via your mobile-menu-wrapper */
+  }
+}
 
 
 

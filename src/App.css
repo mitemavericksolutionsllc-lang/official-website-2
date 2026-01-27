@@ -27,6 +27,7 @@ html {
   --text-secondary:  #ffffff;
   --accent-1: #26AA87;
   --accent-2: #42CCA4;
+  --accent-3: #2a2a2a;
   --border-color: #2a2a2a;
   --button-bg: #26AA87;
   --button-text: #0a0a0a;
@@ -517,4 +518,11 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--accent-2); /* Use your brand color on hover */
 }
+
+@media (max-width: 768px) {
+  ::-webkit-scrollbar{
+    display: none;
+  }
+}
+
  

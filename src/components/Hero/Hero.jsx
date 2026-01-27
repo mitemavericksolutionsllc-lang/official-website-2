@@ -12,20 +12,15 @@ import Whatsapp from '../../assets/images/Hero/mdi_whatsapp.png';
 import Linkedin from '../../assets/images/Hero/basil_linkedin-outline.png';
 import Telegram from '../../assets/images/Hero/Telegram.png';    
 
-// Memoize the typewriter component properly
 const ZenithTypewriter = memo(({ texts }) => {
   const dynamicText = useTypewriter(texts, 80, 2000);
-  
   return (
     <span className="zenith-highlight zenith-typewriter-container">
       <span className="zenith-typewriter-text">{dynamicText}</span>
       <span className="zenith-typewriter-cursor"></span>
     </span>
   );
-}, (prevProps, nextProps) => {
-  // Only re-render if texts array actually changed
-  return JSON.stringify(prevProps.texts) === JSON.stringify(nextProps.texts);
-});
+}, (prevProps, nextProps) => JSON.stringify(prevProps.texts) === JSON.stringify(nextProps.texts));
 
 const Hero = ({
   heroImage = LogoImg,
@@ -40,80 +35,66 @@ const Hero = ({
   const videoRef = useRef(null);
   const [sectionRef, isSectionVisible] = useScrollAnimation(0.1);
   const [heroTranslations, setHeroTranslations] = useState(null);
-  const translationsLoaded = useRef(false);
+  
+  // Modal State
+  const [activeModal, setActiveModal] = useState(null); // 'WhatsApp' or 'Telegram' or null
+  const [copySuccess, setCopySuccess] = useState(false);
 
-  // Load translations once
+  const contactDetails = {
+    WhatsApp: { number: "+963 988 077 039", flag: "🇸🇾" }, // Change to your actual number/flag
+    Telegram: { number: "+963 988 077 039", flag: "🇸🇾" }
+  };
+
   useEffect(() => {
-    if (translationsLoaded.current) return;
-    
     const loadTranslations = async () => {
       try {
         const response = await import(`../../locales/${language}/hero.json`);
         setHeroTranslations(response.default);
-        translationsLoaded.current = true;
       } catch (error) {
-        console.error(`Failed to load hero translations for ${language}:`, error);
-        try {
-          const fallback = await import(`../../locales/en/hero.json`);
-          setHeroTranslations(fallback.default);
-          translationsLoaded.current = true;
-        } catch (e) {
-          console.error("Failed to load fallback translations:", e);
-        }
+        const fallback = await import(`../../locales/en/hero.json`);
+        setHeroTranslations(fallback.default);
       }
     };
-
     loadTranslations();
-
-    return () => {
-      translationsLoaded.current = false;
-    };
   }, [language]);
 
-  // Memoize typewriter texts to prevent recreation on every render
+  const handleSocialClick = (e, platform, url) => {
+    if (platform === "WhatsApp" || platform === "Telegram") {
+      e.preventDefault();
+      setActiveModal(platform);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
+  };
+
   const typewriterTexts = useMemo(() => {
     if (!heroTranslations) return ["", "", ""];
-    return [
-      heroTranslations.title_part2,
-      heroTranslations.title_part3,
-      heroTranslations.title_part4
-    ];
+    return [heroTranslations.title_part2, heroTranslations.title_part3, heroTranslations.title_part4];
   }, [heroTranslations]);
 
-  useEffect(() => {
-    if (videoRef.current && mediaType === "video" && autoPlayVideo) {
-      videoRef.current.play().catch((err) => console.log("Video blocked", err));
-    }
-  }, [mediaType, autoPlayVideo]);
-
-  // Memoize social links
   const socialLinks = useMemo(() => [
-    { platform: "Facebook", img: Facebook, url: "#" },
-    { platform: "Instagram", img: Instagram, url: "#" },
+    { platform: "Facebook", img: Facebook, url: "https://www.facebook.com/share/17EGMcm3xy/" },
+    { platform: "Instagram", img: Instagram, url: "https://www.instagram.com/mitemaverick.sy?igsh=dDZ3cm12OHVscTJ3" },
     { platform: "WhatsApp", img: Whatsapp, url: "#" },
-    { platform: "LinkedIn", img: Linkedin, url: "#" },
+    // { platform: "LinkedIn", img: Linkedin, url: "#" },
     { platform: "Telegram", img: Telegram, url: "#" },
   ], []);
 
-  // Early return if translations aren't loaded
-  if (!heroTranslations) {
-    return <div className="zenith-hero-section">Loading...</div>;
-  }
+  if (!heroTranslations) return <div className="zenith-hero-section">Loading...</div>;
 
   return (
     <section id="home" className="zenith-hero-section" ref={sectionRef}>
       <div className="zenith-main-layout">
-        
-        {/* Left Side Content */}
         <div className="zenith-text-block">
           <h1 className="zenith-main-title">
             {heroTranslations.title_part1} <br /> 
             <ZenithTypewriter key={language} texts={typewriterTexts} />
           </h1>
-          
-          <p className="zenith-sub-text">
-            {heroTranslations.subtitle}
-          </p>
+          <p className="zenith-sub-text">{heroTranslations.subtitle}</p>
 
           <div className="zenith-action-area">
             <a href="#contact" className="zenith-cta-btn">
@@ -126,7 +107,13 @@ const Hero = ({
             <h4 className="zenith-social-label">{heroTranslations.social_label}</h4>
             <div className="zenith-social-grid">
               {socialLinks.map((social, index) => (
-                <a key={index} href={social.url} className="zenith-social-item" aria-label={social.platform}>
+                <a 
+                  key={index} 
+                  href={social.url} 
+                  className="zenith-social-item" 
+                  aria-label={social.platform}
+                  onClick={(e) => handleSocialClick(e, social.platform, social.url)}
+                >
                   <img src={social.img} alt={social.platform} className="zenith-icon-asset" />
                 </a>
               ))}
@@ -134,7 +121,6 @@ const Hero = ({
           </div>
         </div>
 
-        {/* Right Side Media (Logo) */}
         <div className="zenith-media-block">
           <div className="zenith-asset-holder">
             {mediaType === "image" ? (
@@ -147,6 +133,26 @@ const Hero = ({
           </div>
         </div>
       </div>
+
+      {/* --- Contact Modal Window --- */}
+      {activeModal && (
+        <div className="zenith-modal-overlay" onClick={() => setActiveModal(null)} dir="ltr">
+          <div className="zenith-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{activeModal} Contact</h3>
+            <div className="zenith-contact-row">
+              <span className="zenith-flag">{contactDetails[activeModal].flag}</span>
+              <span className="zenith-number">{contactDetails[activeModal].number}</span>
+              <button 
+                className="zenith-copy-btn" 
+                onClick={() => copyToClipboard(contactDetails[activeModal].number)}
+              >
+                {copySuccess ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <button className="zenith-close-modal" onClick={() => setActiveModal(null)}>Close</button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

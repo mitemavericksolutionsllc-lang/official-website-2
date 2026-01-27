@@ -57,6 +57,7 @@
 .orbit-image-wrapper {
   width: 60px;
   height: 60px;
+  /* margin: 0 auto 25px auto; */
   margin-bottom: 25px;
   display: flex;
   align-items: center;
@@ -74,8 +75,9 @@
   font-size: 32px;
   color: var(--text-primary);
   margin-bottom: 15px;
-  display: flex;
-  justify-content: center;
+  /* Change these two lines: */
+  display: block; 
+  text-align: center; /* This ensures line 2 is centered under line 1 */
 }
 
 .orbit-card {
@@ -163,6 +165,9 @@
   color: var(--text-secondary);
   line-height: 1.6;
   font-size: 24px;
+  /* Change these two lines: */
+  display: block;
+  text-align: center; /* This ensures the description also centers every line */
 }
 
 .orbit-card-footer {
@@ -265,6 +270,7 @@
 
   .orbit-card {
     padding: 25px;
+ 
   }
 
   .orbit-title {
@@ -323,6 +329,8 @@
 
   .orbit-card {
     padding: 20px;
+    position: relative;
+    right: 15px;
   }
 
   .orbit-title {
@@ -469,7 +477,7 @@
 .orbit-container.rtl .orbit-desc {
   text-align: right;
   direction: rtl;
-}
+} 
 
 .orbit-container.rtl .orbit-card-content {
   text-align: right;
@@ -594,15 +602,15 @@
   }
 
   [dir="rtl"] .orbit-nav-btn.prev {
-    right: 5px;
-    left: auto;
-    transform: translateY(-50%) scaleX(-1);
+    right: auto;
+    left: 5px;
+    transform: translateY(-50%) ;
   }
 
   [dir="rtl"] .orbit-nav-btn.next {
-    left: 5px;
-    right: auto;
-    transform: translateY(-50%) scaleX(-1);
+    left: auto;
+    right: 5px;
+    transform: translateY(-50%) ;
   }
 
   [lang="ar"] .orbit-title {

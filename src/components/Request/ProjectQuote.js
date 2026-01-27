@@ -4,6 +4,8 @@ import { useLanguage } from "../../context/LanguageContext";
 import en from "../../locales/en/request.json";
 import ar from "../../locales/ar/request.json";
 
+import emailjs from "@emailjs/browser";
+
 const ProjectQuote = () => {
   const { language } = useLanguage();
   const t = language === "ar" ? ar : en;
@@ -44,36 +46,29 @@ const ProjectQuote = () => {
     setOpenDropdown(openDropdown === name ? null : name);
   };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: value }));
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setOpenDropdown(null); // Automatically closes/rotates arrow back down after selection
   };
 
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    // If the click is outside the section and a dropdown is open, close it
-    if (sectionRef.current && !sectionRef.current.contains(event.target)) {
-      setOpenDropdown(null);
-      setActiveField(null); // Also reset the active border
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If the click is outside the section and a dropdown is open, close it
+      if (sectionRef.current && !sectionRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+        setActiveField(null); // Also reset the active border
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  document.addEventListener("touchstart", handleClickOutside);
-  
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-    document.removeEventListener("touchstart", handleClickOutside);
-  };
-}, [openDropdown]); // Add openDropdown as a dependency
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
 
-
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [openDropdown]); // Add openDropdown as a dependency
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -88,7 +83,7 @@ useEffect(() => {
       "contact",
     ];
     const isFormValid = requiredFields.every(
-      (field) => formData[field].trim() !== ""
+      (field) => formData[field].trim() !== "",
     );
 
     if (isFormValid) {
@@ -96,65 +91,87 @@ useEffect(() => {
     }
   };
 
-  const handleConfirmSubmit = async () => {
-    setLoading(true);
-    try {
-      const finalTech =
-        formData.techType === "Specified"
-          ? formData.customTech
-          : formData.techType;
-      const response = await fetch("http://127.0.0.1:5000/send-quote", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, techType: finalTech }),
-      });
+  // 1. Add this import at the top
 
-      if (response.ok) {
-        setIsSubmitted(true);
-        setFormData({
-          sector: "",
-          platform: "",
-          visualIdentity: "",
-          deliveryTime: "",
-          techType: "",
-          customTech: "",
-          budget: "",
-          contact: "",
-        });
-        setShowModal(false);
-        setTimeout(() => setIsSubmitted(false), 5000);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Add this inside the ProjectQuote component, near your other useEffects
+useEffect(() => {
+  const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+  if (publicKey) {
+    emailjs.init(publicKey);
+  }
+}, []);
+
+const handleConfirmSubmit = async () => {
+  setLoading(true);
+
+  // Reference your .env variables
+  const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+  const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+  const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+  // Debugging check: If these logs show 'undefined', your .env file is not being read.
+  console.log("Service ID:", serviceId); 
+  console.log("Template ID:", templateId);
+
+  try {
+    // Send the form data to EmailJS
+    await emailjs.send(
+      serviceId,
+      templateId,
+      {
+        sector: formData.sector === "Other" ? formData.customSector : formData.sector,
+        platform: formData.platform,
+        visualIdentity: formData.visualIdentity,
+        deliveryTime: formData.deliveryTime,
+        techType: formData.techType === "Specified" ? formData.customTech : formData.techType,
+        budget: formData.budget,
+        contact: formData.contact,
+        // Optional: you can add a display name for the email body
+        from_name: formData.contact, 
+      },
+      publicKey // Passing it here as a backup to the init() call
+    );
+
+    setIsSubmitted(true);
+    setShowModal(false);
+  } catch (error) {
+    console.error("FAILED...", error);
+    alert(
+      language === "ar"
+        ? "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
+        : "Failed to send request. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+if (isSubmitted) {
+    return (
+      <div className="submission-success-overlay">
+        <div className="submission-success-card">
+          <div className="success-icon-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h2>{language === "ar" ? "شكراً لك!" : "Thank You!"}</h2>
+          <p>
+            {language === "ar"
+              ? "لقد تم استلام طلبك بنجاح. سيتواصل معك فريقنا قريباً."
+              : "Your request has been received successfully. Our team will contact you shortly."}
+          </p>
+          <button onClick={() => setIsSubmitted(false)} className="success-back-btn">
+            {language === "ar" ? "إرسال طلب جديد" : "Submit New Request"}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleCancel = () => {
     setShowModal(false);
   };
-
-  // Helper function to get display values
-  // const getDisplayValue = (field, value) => {
-  //   if (!value) return "-";
-
-  //   // Handle Sector display for "Other"
-  //   if (field === "sector") {
-  //     return formData.sector === "Other"
-  //       ? formData.customSector || t.placeholders.sector
-  //       : value;
-  //   }
-
-  //   // Handle tech type display
-  //   if (field === "techType") {
-  //     return formData.techType === "Specified"
-  //       ? formData.customTech || t.placeholders.tech
-  //       : value;
-  //   }
-
-  //   return value;
-  // };
 
   const getDisplayValue = (field, value) => {
     if (!value) return "-";
@@ -292,7 +309,7 @@ useEffect(() => {
                   onChange={handleChange}
                   WebApplication
                   onFocus={() => setActiveField("platform")}
-                                    onBlur={() => {
+                  onBlur={() => {
                     setActiveField(null);
                     setOpenDropdown(null);
                   }}
@@ -340,7 +357,7 @@ useEffect(() => {
                   value={formData.visualIdentity}
                   onChange={handleChange}
                   onFocus={() => setActiveField("visualIdentity")}
-                                    onBlur={() => {
+                  onBlur={() => {
                     setActiveField(null);
                     setOpenDropdown(null);
                   }}
@@ -380,7 +397,7 @@ useEffect(() => {
                   value={formData.deliveryTime}
                   onChange={handleChange}
                   onFocus={() => setActiveField("deliveryTime")}
-                                    onBlur={() => {
+                  onBlur={() => {
                     setActiveField(null);
                     setOpenDropdown(null);
                   }}
@@ -421,7 +438,7 @@ useEffect(() => {
                   value={formData.techType}
                   onChange={handleChange}
                   onFocus={() => setActiveField("techType")}
-                                   onBlur={() => {
+                  onBlur={() => {
                     setActiveField(null);
                     setOpenDropdown(null);
                   }}
@@ -469,7 +486,7 @@ useEffect(() => {
                   value={formData.budget}
                   onChange={handleChange}
                   onFocus={() => setActiveField("budget")}
-                                   onBlur={() => {
+                  onBlur={() => {
                     setActiveField(null);
                     setOpenDropdown(null);
                   }}
@@ -525,61 +542,59 @@ useEffect(() => {
             </div>
 
             <div className="modal-body">
-<div className="details-grid">
-  {/* Sector */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.sector}:</span>
-    <span className="detail-value">
-      {getDisplayValue("sector", formData.sector)}
-    </span>
-  </div>
+              <div className="details-grid">
+                {/* Sector */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.sector}:</span>
+                  <span className="detail-value">
+                    {getDisplayValue("sector", formData.sector)}
+                  </span>
+                </div>
 
-  {/* Platform */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.platform}:</span>
-    <span className="detail-value">
-      {getDisplayValue("platform", formData.platform)}
-    </span>
-  </div>
+                {/* Platform */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.platform}:</span>
+                  <span className="detail-value">
+                    {getDisplayValue("platform", formData.platform)}
+                  </span>
+                </div>
 
-  {/* Visual Identity */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.identity}:</span>
-    <span className="detail-value">
-      {getDisplayValue("visualIdentity", formData.visualIdentity)}
-    </span>
-  </div>
+                {/* Visual Identity */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.identity}:</span>
+                  <span className="detail-value">
+                    {getDisplayValue("visualIdentity", formData.visualIdentity)}
+                  </span>
+                </div>
 
-  {/* Delivery Time */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.delivery}:</span>
-    <span className="detail-value">
-      {getDisplayValue("deliveryTime", formData.deliveryTime)}
-    </span>
-  </div>
+                {/* Delivery Time */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.delivery}:</span>
+                  <span className="detail-value">
+                    {getDisplayValue("deliveryTime", formData.deliveryTime)}
+                  </span>
+                </div>
 
-  {/* Tech Type */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.tech}:</span>
-    <span className="detail-value">
-      {getDisplayValue("techType", formData.techType)}
-    </span>
-  </div>
+                {/* Tech Type */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.tech}:</span>
+                  <span className="detail-value">
+                    {getDisplayValue("techType", formData.techType)}
+                  </span>
+                </div>
 
-  {/* Budget */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.budget}:</span>
-    <span className="detail-value">
-      {formData.budget}
-    </span>
-  </div>
+                {/* Budget */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.budget}:</span>
+                  <span className="detail-value">{formData.budget}</span>
+                </div>
 
-  {/* Contact Info */}
-  <div className="detail-item">
-    <span className="detail-label">{t.labels.contact}:</span>
-    <span className="detail-value">{formData.contact}</span>
-  </div>
-</div>
+                {/* Contact Info */}
+                <div className="detail-item">
+                  <span className="detail-label">{t.labels.contact}:</span>
+                  <span className="detail-value">{formData.contact}</span>
+                </div>
+              </div>
 
               <p
                 style={{
@@ -615,8 +630,8 @@ useEffect(() => {
                     ? "جاري الإرسال..."
                     : "Submitting..."
                   : language === "ar"
-                  ? "تأكيد وإرسال"
-                  : "Confirm & Submit"}
+                    ? "تأكيد وإرسال"
+                    : "Confirm & Submit"}
               </button>
             </div>
           </div>
