@@ -116,7 +116,7 @@ const handleSubmit = async (e) => {
         </h1>
       </div>
 
-      <div className="contact-container">
+      <div id="contact_container" className="contact-container">
         <div className="contact-info">
           <h1 className="hero-text">
             {t.heroTextTop} <br />

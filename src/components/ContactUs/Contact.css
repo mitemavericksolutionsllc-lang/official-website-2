@@ -51,6 +51,18 @@
   text-align: right;
 }
 
+@media (max-width: 768px) {
+.contact-info .hero-text {
+  font-size: 60px;
+}
+
+  [dir="rtl"] .contact-info .hero-text {
+  font-size: 60px;
+  bottom: -60px;
+  }
+
+}
+
 .say-hi {
   color: #26AA87;
   text-shadow: 0 0 40px rgba(38, 170, 135, 0.3);

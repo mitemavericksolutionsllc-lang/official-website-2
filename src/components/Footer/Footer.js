@@ -7,6 +7,8 @@ import whatsappIcon from "../../assets/images/footer/whatsapp.png";
 import facebookIcon from "../../assets/images/footer/facebook.png";
 import TelegramIcon from "../../assets/images/footer/Telegram.png";
 
+import SyrianFlag from "../../assets/images/footer/syrian_flag.png";
+
 const MiteFooter = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [activeContact, setActiveContact] = useState({
@@ -15,10 +17,19 @@ const MiteFooter = () => {
     flag: "",
   });
   const [copySuccess, setCopySuccess] = useState(false);
+  const [activeModal, setActiveModal] = useState(null); // 'WhatsApp' or 'Telegram' or null
 
   const contactDetails = {
-    whatsapp: { name: "WhatsApp", number: "+963 988 077 039", flag: "SY" },
-    telegram: { name: "Telegram", number: "+963 988 077 039", flag: "SY" },
+    whatsapp: {
+      name: "WhatsApp",
+      number: "+963 988 077 039",
+      flag: SyrianFlag,
+    },
+    telegram: {
+      name: "Telegram",
+      number: "+963 988 077 039",
+      flag: SyrianFlag,
+    },
   };
 
   const openPopup = (e, type) => {
@@ -46,7 +57,11 @@ const MiteFooter = () => {
               href="https://www.instagram.com/mitemaverick.sy?igsh=dDZ3cm12OHVscTJ3"
               className="mm-social-icon"
             >
-              <img src={instaIcon} alt="Instagram" className="Instagram-image"/>
+              <img
+                src={instaIcon}
+                alt="Instagram"
+                className="Instagram-image"
+              />
             </a>
             {/* <a href="#" className="mm-social-icon"><img src={linkedinIcon} alt="LinkedIn" /></a> */}
 
@@ -56,14 +71,22 @@ const MiteFooter = () => {
               className="mm-social-icon"
               onClick={(e) => openPopup(e, "whatsapp")}
             >
-              <img src={whatsappIcon} alt="WhatsApp" className="WhatsApp-image" />
+              <img
+                src={whatsappIcon}
+                alt="WhatsApp"
+                className="WhatsApp-image"
+              />
             </a>
 
             <a
               href="https://www.facebook.com/share/17EGMcm3xy/"
               className="mm-social-icon"
             >
-              <img src={facebookIcon} alt="Facebook"  className="Facebook-image"/>
+              <img
+                src={facebookIcon}
+                alt="Facebook"
+                className="Facebook-image"
+              />
             </a>
 
             {/* Trigger Popup for Telegram */}
@@ -72,7 +95,11 @@ const MiteFooter = () => {
               className="mm-social-icon"
               onClick={(e) => openPopup(e, "telegram")}
             >
-              <img src={TelegramIcon} alt="Telegram" className="Telegram-image" />
+              <img
+                src={TelegramIcon}
+                alt="Telegram"
+                className="Telegram-image"
+              />
             </a>
           </div>
         </div>
@@ -93,7 +120,13 @@ const MiteFooter = () => {
           >
             <h3>Contact via {activeContact.name}</h3>
             <div className="mm-contact-row">
-              <span className="mm-flag">{activeContact.flag}</span>
+              <div className="zenith-flag-container">
+                <img
+                  src={activeContact.flag}
+                  alt="Country Flag"
+                  className="zenith-modal-flag-img"
+                />
+              </div>
               <span className="mm-number">{activeContact.number}</span>
               <button
                 className="mm-copy-btn"

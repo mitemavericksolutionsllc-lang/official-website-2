@@ -404,3 +404,28 @@
   color: white;
   border-color: white;
 }
+
+
+
+
+/* Styling for the flag image in the modal */
+.zenith-flag-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; /* Adjust size as needed */
+  height: 20px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.zenith-modal-flag-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Adjust the contact row gap if needed */
+.zenith-contact-row {
+  gap: 12px;
+}
