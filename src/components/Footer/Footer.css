@@ -67,6 +67,7 @@
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .mm-social-icon img {

@@ -24,17 +24,23 @@ const MiteFooter = () => {
       name: "WhatsApp",
       number: "+963 988 077 039",
       flag: SyrianFlag,
+      url: "https://wa.me/963988077039",
     },
     telegram: {
       name: "Telegram",
       number: "+963 988 077 039",
       flag: SyrianFlag,
+      url: "https://t.me/+963988077039",
     },
   };
 
   const openPopup = (e, type) => {
     e.preventDefault();
     setActiveContact(contactDetails[type]);
+
+    const chatUrl = contactDetails[type].url;
+    window.open(chatUrl, "_blank", "noopener,noreferrer");
+
     setShowPopup(true);
   };
 
@@ -67,9 +73,10 @@ const MiteFooter = () => {
 
             {/* Trigger Popup for WhatsApp */}
             <a
-              href="#"
               className="mm-social-icon"
-              onClick={(e) => openPopup(e, "whatsapp")}
+              // onClick={(e) => openPopup(e, "whatsapp")}
+              href="https://wa.me/963988077039"
+              target="_blank"
             >
               <img
                 src={whatsappIcon}
@@ -91,9 +98,10 @@ const MiteFooter = () => {
 
             {/* Trigger Popup for Telegram */}
             <a
-              href="#"
+              href="https://t.me/+963988077039"
               className="mm-social-icon"
-              onClick={(e) => openPopup(e, "telegram")}
+              target="_blank"
+              // onClick={(e) => openPopup(e, "telegram")}
             >
               <img
                 src={TelegramIcon}

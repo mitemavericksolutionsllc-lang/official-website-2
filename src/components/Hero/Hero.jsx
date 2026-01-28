@@ -2,7 +2,6 @@ import React, { useEffect, useRef, memo, useState, useMemo } from "react";
 import "./Hero.css";
 import { useTypewriter } from "../../hooks/useTypewriter";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import LogoImg from "../../assets/images/Asset 2@4x.png";
 import { useLanguage } from "../../context/LanguageContext";
 
 // Social Icon Imports
@@ -14,44 +13,60 @@ import Telegram from "../../assets/images/Hero/Telegram.png";
 
 import SyrianFlag from "../../assets/images/Hero/syrian_flag.png";
 
-const ZenithTypewriter = memo(
-  ({ texts }) => {
-    const dynamicText = useTypewriter(texts, 80, 2000);
-    return (
-      <span className="zenith-highlight zenith-typewriter-container">
-        <span className="zenith-typewriter-text">{dynamicText}</span>
-        <span className="zenith-typewriter-cursor"></span>
-      </span>
-    );
-  },
-  (prevProps, nextProps) =>
-    JSON.stringify(prevProps.texts) === JSON.stringify(nextProps.texts),
-);
+// Video Imports
+import Godhands from "../../assets/videos/Hero/GodHands.mp4";
+import GodhandsMobile from "../../assets/videos/Hero/godshandsmobile.mp4";
 
-const Hero = ({
-  heroImage = LogoImg,
-  heroVideo = null,
-  mediaType = "image",
-  altText = "Hero visual",
-  autoPlayVideo = true,
-  loopVideo = true,
-  mutedVideo = true,
-}) => {
+const ZenithTypewriter = memo(({ texts }) => {
+  const dynamicText = useTypewriter(texts, 80, 2000);
+  return (
+    <div className="zenith-typewriter-fixed-height">
+      <span className="zenith-typewriter-text-clean">{dynamicText}</span>
+      <span className="zenith-typewriter-cursor-clean">|</span>
+    </div>
+  );
+});
+
+const Hero = ({ autoPlayVideo = true, mutedVideo = true }) => {
   const { language } = useLanguage();
   const videoRef = useRef(null);
-  const [sectionRef, isSectionVisible] = useScrollAnimation(0.1);
+  const [sectionRef] = useScrollAnimation(0.1);
   const [heroTranslations, setHeroTranslations] = useState(null);
+  const [startReveal, setStartReveal] = useState(false);
+  const [videoSrc, setVideoSrc] = useState(Godhands);
 
   // Modal State
-  const [activeModal, setActiveModal] = useState(null); // 'WhatsApp' or 'Telegram' or null
-  const [copySuccess, setCopySuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    name: "",
+    number: "",
+    flag: "",
+  });
 
+  // Contact Information
   const contactDetails = {
-    WhatsApp: { number: "+963 988 077 039", flag: SyrianFlag }, // Change to your actual number/flag
-    Telegram: { number: "+963 988 077 039", flag: SyrianFlag },
+    WhatsApp: {
+      number: "+963 988 077 039",
+      flag: SyrianFlag,
+      url: "https://wa.me/963988077039"
+    },
+    Telegram: {
+      number: "+963 988 077 039",
+      flag: SyrianFlag,
+      url: "https://t.me/+963988077039"
+    },
   };
 
   useEffect(() => {
+    const mql = window.matchMedia("(max-width: 768px)");
+    const applyVideoSource = (e) => {
+      setVideoSrc(e.matches ? GodhandsMobile : Godhands);
+    };
+    mql.addEventListener("change", applyVideoSource);
+    applyVideoSource(mql);
+
+    const timer = setTimeout(() => setStartReveal(true), 3000);
+
     const loadTranslations = async () => {
       try {
         const response = await import(`../../locales/${language}/hero.json`);
@@ -62,19 +77,33 @@ const Hero = ({
       }
     };
     loadTranslations();
+
+    return () => {
+      mql.removeEventListener("change", applyVideoSource);
+      clearTimeout(timer);
+    };
   }, [language]);
 
-  const handleSocialClick = (e, platform, url) => {
-    if (platform === "WhatsApp" || platform === "Telegram") {
-      e.preventDefault();
-      setActiveModal(platform);
-    }
-  };
+  // const handleSocialClick = (e, platform, url) => {
+  //   if (platform === "WhatsApp" || platform === "Telegram") {
+  //     e.preventDefault();
 
-  const copyToClipboard = (text) => {
+  //     const chatUrl = contactDetails[platform].url;
+  //     window.open(chatUrl, "_blank", "noopener,noreferrer");
+
+  //     setActiveModal(platform);
+  //   }
+  // };
+
+  const [copied, setCopied] = useState(false);
+
+  // 2. Define the handleCopy function
+  const handleCopy = (text) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
-    setCopySuccess(true);
-    setTimeout(() => setCopySuccess(false), 2000);
+    setCopied(true);
+    // Reset the icon back to "copy" after 2 seconds
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const typewriterTexts = useMemo(() => {
@@ -98,119 +127,159 @@ const Hero = ({
         img: Instagram,
         url: "https://www.instagram.com/mitemaverick.sy?igsh=dDZ3cm12OHVscTJ3",
       },
-      { platform: "WhatsApp", img: Whatsapp, url: "#" },
+      { platform: "WhatsApp", img: Whatsapp, url: "https://wa.me/963988077039" },
       // { platform: "LinkedIn", img: Linkedin, url: "#" },
-      { platform: "Telegram", img: Telegram, url: "#" },
+      { platform: "Telegram", img: Telegram, url: "https://t.me/+963988077039" },
     ],
     [],
   );
 
-  if (!heroTranslations)
-    return <div className="zenith-hero-section">Loading...</div>;
+  if (!heroTranslations) return null;
 
   return (
     <section id="home" className="zenith-hero-section" ref={sectionRef}>
-      <div className="zenith-main-layout">
-        <div className="zenith-text-block">
-          <h1 className="zenith-main-title">
-            {heroTranslations.title_part1} <br />
-            <ZenithTypewriter key={language} texts={typewriterTexts} />
-          </h1>
-          <p className="zenith-sub-text">{heroTranslations.subtitle}</p>
+      <div className="zenith-shade-top"></div>
+      <div className="zenith-shade-bottom"></div>
 
-          <div className="zenith-action-area">
-            <a href="#contact_container" className="zenith-cta-btn">
-              <span>{heroTranslations.cta_button}</span>
-              <span className="zenith-btn-arrow">→</span>
-            </a>
-          </div>
+      <div className="zenith-video-wrapper-full">
+        <video
+          key={videoSrc}
+          ref={videoRef}
+          autoPlay={autoPlayVideo}
+          muted={mutedVideo}
+          playsInline
+          className="zenith-video-element-full"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+        <div className="zenith-video-overlay-dark"></div>
+      </div>
 
-          <div
-            className={`zenith-social-wrapper ${isSectionVisible ? "zenith-visible" : ""}`}
+      <div className="zenith-content-center">
+        <h1 className={`zenith-expand-reveal ${startReveal ? "active" : ""}`}>
+          <div className="title-static">{heroTranslations.title_part1}</div>
+          <ZenithTypewriter key={language} texts={typewriterTexts} />
+        </h1>
+
+        <div className="subtitle-static-zenith">
+          <p
+            className={`zenith-expand-reveal delay-1 ${startReveal ? "active" : ""}`}
           >
-            <h4 className="zenith-social-label">
-              {heroTranslations.social_label}
-            </h4>
-            <div className="zenith-social-grid">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.url}
-                  className="zenith-social-item"
-                  aria-label={social.platform}
-                  onClick={(e) =>
-                    handleSocialClick(e, social.platform, social.url)
-                  }
-                >
-                  <img
-                    src={social.img}
-                    alt={social.platform}
-                    className="zenith-icon-asset"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
+            {heroTranslations.subtitle}
+          </p>
         </div>
 
-        <div className="zenith-media-block">
-          <div className="zenith-asset-holder">
-            {mediaType === "image" ? (
-              <img src={heroImage} alt={altText} className="zenith-img-fluid" />
-            ) : (
-              <video
-                ref={videoRef}
-                className="zenith-video-fluid"
-                autoPlay
-                loop
-                muted
-                playsInline
-              >
-                <source src={heroVideo} type="video/mp4" />
-              </video>
-            )}
-          </div>
+        <div
+          className={`zenith-expand-reveal delay-2 ${startReveal ? "active" : ""}`}
+        >
+          <a href="#contact_container" className="zenith-cta-btn">
+            <span>{heroTranslations.cta_button}</span>
+            <span className="zenith-btn-arrow">
+              {heroTranslations.Cta_btn_arow}
+            </span>
+          </a>
         </div>
       </div>
 
-      {/* --- Contact Modal Window --- */}
-      {activeModal && (
-        <div
-          className="zenith-modal-overlay"
-          onClick={() => setActiveModal(null)}
-          dir="ltr"
-        >
+      <div
+        className={`zenith-social-sidebar-reveal ${startReveal ? "active" : ""}`}
+      >
+        <div className="zenith-social-grid-vertical">
+          {socialLinks.map((social, index) => (
+            <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="zenith-social-item"
+                  aria-label={social.platform}
+                  // onClick={(e) => handleSocialClick(e, social.platform, social.url)}
+            >
+              <img
+                src={social.img}
+                alt={social.platform}
+                className="zenith-icon-asset"
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+      {showModal && (
+        <div className="mm-modal-overlay" onClick={() => setShowModal(false)}>
           <div
-            className="zenith-modal-content"
+            className="mm-modal-content"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3>{activeModal} Contact</h3>
-            <div className="zenith-contact-row">
-              <div className="zenith-flag-container">
-                <img
-                  src={contactDetails[activeModal].flag}
-                  alt="Country Flag"
-                  className="zenith-modal-flag-img"
-                />
-              </div>
-              <span className="zenith-number">
-                {contactDetails[activeModal].number}
-              </span>
-              <button
-                className="zenith-copy-btn"
-                onClick={() =>
-                  copyToClipboard(contactDetails[activeModal].number)
-                }
+            {/* Redesigned Close Button */}
+            <button className="mm-close-x" onClick={() => setShowModal(false)}>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                {copySuccess ? "Copied!" : "Copy"}
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            <h3>Contact via {modalData.name}</h3>
+
+            <div className="mm-horizontal-container">
+              <div className="mm-number-text">
+                <span>{modalData.flag}</span>
+                <span>{modalData.number}</span>
+              </div>
+
+              {/* Vertical Line */}
+              <div className="mm-separator"></div>
+
+              <button
+                className={`mm-copy-btn-small ${copied ? "copied" : ""}`}
+                onClick={() => handleCopy(modalData.number)}
+              >
+                {copied ? (
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ animation: "fadeIn 0.2s" }}
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                ) : (
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect
+                      x="9"
+                      y="9"
+                      width="13"
+                      height="13"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                )}
               </button>
             </div>
-            <button
-              className="zenith-close-modal"
-              onClick={() => setActiveModal(null)}
-            >
-              Close
-            </button>
           </div>
         </div>
       )}

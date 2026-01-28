@@ -1,129 +1,212 @@
+/* --- Base Section --- */
 .zenith-hero-section {
   min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 5%;
-  position: relative;
-  background: transparent;
 }
 
-.zenith-main-layout {
+.title-static {
+  font-size: 48px;
+  color: var(--text-primary);
+}
+
+.subtitle-static-zenith {
+  max-width: 600px;
+  font-size: 16px;
+}
+
+/* --- Glow Shade Lights --- */
+.zenith-shade-top,
+.zenith-shade-bottom {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 2rem;
-  align-items: center;
-  z-index: 2;
-  background: transparent;
+  height: 500px;
+  z-index: 3;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.8;
 }
 
-/* --- Text Section --- */
-.zenith-text-block {
-  animation: zenithFadeIn 1s ease;
-  position: relative;
-  /* Removed left: 200px to fix horizontal scroll */
+.zenith-shade-top {
+  top: -200px;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(38, 170, 135) 0%,
+    rgba(38, 170, 135, 0.6) 25%,
+    transparent 70%
+  );
+  animation: pulse-glow 4s ease-in-out infinite;
 }
 
-.zenith-main-title {
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
-  color: var(--text-secondary); /* Main title in white */
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
+.zenith-shade-bottom {
+  bottom: -200px;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(38, 170, 135) 0%,
+    rgba(38, 170, 135, 0.741) 25%,
+    transparent 70%
+  );
+  animation: pulse-glow 4s ease-in-out infinite reverse;
 }
 
-.zenith-typewriter-container {
-  display: inline-flex;
-  align-items: center;
-  min-width: 320px;
-  height: 1.2em;
-  vertical-align: bottom;
-  user-select: none;
-}
-
-.zenith-typewriter-text {
-  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  white-space: nowrap;
-  will-change: content;
-}
-
-.zenith-typewriter-cursor {
-  display: inline-block;
-  margin-left: 4px;
-  width: 3px;
-  height: 1.1em;
-  background-color: var(--accent-1);
-  /* Use a transform-based blink for better performance than opacity */
-  animation: zenithBlink 1s step-end infinite;
-}
-
-@keyframes zenithBlink {
+@keyframes pulse-glow {
   0%,
   100% {
-    visibility: visible;
+    opacity: 0.6;
   }
   50% {
-    visibility: hidden;
+    opacity: 0.9;
   }
 }
 
-.zenith-sub-text {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  opacity: 0.8;
-  max-width: 500px;
-  margin-bottom: 2.5rem;
+/* --- Centered Video --- */
+.zenith-video-wrapper-full {
+position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
 }
 
-/* --- Themed Button --- */
+.zenith-video-element-full {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: fadeInVideo 1.5s ease;
+}
+
+.zenith-video-overlay-dark {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* --- Content & Text Design --- */
+.zenith-content-center {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  left: 50px;
+}
+
+.zenith-typewriter-fixed-height {
+  min-height: 1.2em;
+  background: transparent !important;
+}
+
+.zenith-typewriter-text-clean {
+  background: linear-gradient(135deg, var(--text-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 48px;
+}
+
+.zenith-typewriter-cursor-clean {
+  color: #26aa87;
+  animation: blink 0.8s infinite;
+}
+
+/* --- Animation: Expand from Middle --- */
+.zenith-expand-reveal {
+  opacity: 0;
+  clip-path: inset(0 50% 0 50%);
+  transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+  padding: 20px;
+  position: relative;
+  right: 40px;
+  opacity: 0.8;
+  color: var(--text-secondary);
+}
+
+.zenith-expand-reveal.active {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+.delay-1 {
+  transition-delay: 1s;
+}
+.delay-2 {
+  transition-delay: 1s;
+}
+
+/* --- Button Design --- */
 .zenith-cta-btn {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  position: relative;
+  top: 20px;
+
   padding: 1.1rem 2.6rem;
   font-size: 1.1rem;
   font-weight: 600;
+
   background: var(--gradient-buttons-bg);
   color: var(--text-secondary);
-  transition: 0.4s ease;
-  box-shadow: 0 10px 20px rgba(38, 170, 135, 0.2);
+  transition: 1s ease;
+ 
 }
 
 .zenith-cta-btn:hover {
-  transform: translateY(-5px);
-  filter: brightness(1.1);
-  box-shadow: 0 15px 30px rgba(38, 170, 135, 0.3);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow:  0px 0px 10px var(--accent-1);
+  padding: 1.1rem 2.8rem;
 }
 
-.zenith-btn-arrow {
+.zenith-btn-arrow { 
   transition: 0.3s ease;
+  position: relative;
+  left: 10px;
+ }
+
+.zenith-cta-btn:hover .zenith-btn-arrow { transform: translateX(6px); }
+
+  [dir="rtl"] .zenith-btn-arrow {
+ 
+    transition: 0.3s ease;
+    position: relative;
+    right: 10px;
+  }
+
+  [dir="rtl"] .zenith-cta-btn:hover .zenith-btn-arrow {
+    transform:  translateX(-6px);
+  }
+
+/* --- Social Media Items --- */
+
+.zenith-social-sidebar-reveal {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  opacity: 0;
+  transition: all 1s ease 1.5s;
 }
-.zenith-cta-btn:hover .zenith-btn-arrow {
-  transform: translateX(6px);
+.zenith-social-sidebar-reveal.active {
+  opacity: 1;
 }
 
-/* --- Social Icons (Transparent with Your Border) --- */
-.zenith-social-wrapper {
-  margin-top: 3rem;
-  background: transparent;
-}
-
-.zenith-social-label {
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-}
-
-.zenith-social-grid {
+.zenith-social-grid-vertical {
   display: flex;
+  flex-direction: column;
   gap: 15px;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards; /* Keeps the card visible after animation */
+  animation-timing-function: ease-out;
 }
+
+/* .zenith-social-grid-vertical-bottom { animation-name: slideUp; } */
 
 .zenith-social-item {
   width: 40px;
@@ -134,75 +217,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.3s ease;
-}
-
-.zenith-icon-asset {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  color: var(--text-primary);
+  transition: 0.5s ease;
+  transform-origin: 2px;
+  transform-origin: bottom;
 }
 
 .zenith-social-item:hover {
   background: var(--accent-1);
   border-color: var(--accent-1);
-  transform: translateY(-3px);
+  transform: translateX(-3px);
 }
 
 .zenith-social-item:hover .zenith-icon-asset {
-  filter: brightness(0); /* Black icon on green background */
+  filter: brightness(0);
 }
 
-/* --- Media Asset (Transparent) --- */
-.zenith-media-block {
-  display: flex;
-  justify-content: center;
-  background: transparent;
-}
-
-.zenith-asset-holder {
-  width: 100%;
-  max-width: 500px;
-  background: transparent;
-}
-
-.zenith-img-fluid,
-.zenith-video-fluid {
-  width: 100%;
-  height: auto;
-  background: transparent;
-}
-
-/* --- Responsive & Mobile View Fix --- */
-@media (max-width: 850px) {
-  .zenith-main-layout {
-    grid-template-columns: 1fr;
-    text-align: center;
-    padding-top: 60px;
-  }
-
-  .zenith-text-block {
-    order: 2;
-  }
-  .zenith-media-block {
-    order: 1;
-    margin-bottom: 2rem;
-  }
-
-  .zenith-sub-text {
-    margin: 0 auto 2.5rem;
-  }
-  .zenith-social-grid,
-  .zenith-action-area {
-    justify-content: center;
+@keyframes blink {
+  50% {
+    opacity: 0;
   }
 }
-
-@keyframes zenithFadeIn {
+@keyframes fadeInVideo {
   from {
     opacity: 0;
-    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Slide Up from Bottom */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
   }
   to {
     opacity: 1;
@@ -210,222 +257,306 @@
   }
 }
 
-.zenith-scroll-down {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+/* Slide Down from Top */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.zenith-scroll-bar {
-  width: 2px;
-  height: 40px;
-  background: linear-gradient(to bottom, var(--accent-1), transparent);
+/* Slide In from Left */
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-/* --- Breakpoint: 768px (Tablets) --- */
+/* Slide In from Right */
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+ 
+/* --- Responsive --- */
+
+/* --- Mobile Specific Overrides --- */
 @media (max-width: 768px) {
-  .zenith-main-layout {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 1.5rem;
+  .zenith-hero-section {
+    height: 100svh; 
+    min-height: 100svh;
   }
 
-  .zenith-text-block {
-    order: 2;
-  }
-  .zenith-media-block {
-    order: 1;
-    margin-bottom: 1rem;
-  }
-
-  .zenith-main-title {
-    font-size: 2.5rem;
-    line-height: 1.2;
-  }
-
-  .zenith-sub-text {
-    margin: 0 auto 2rem; /* Centers the subtitle for both languages */
-  }
-
-  .zenith-social-grid,
-  .zenith-action-area {
-    justify-content: center;
-  }
-
-  /* Center the typewriter container itself */
-  .zenith-typewriter-container {
-    justify-content: center;
-    min-width: 100%; /* Allow it to center relative to the screen */
-  }
-
-  /* Language specific adjustments for your "nudge" (right: 40px) */
-  .zenith-ltr .zenith-typewriter-text,
-  .zenith-ltr .zenith-typewriter-cursor {
-    position: relative;
-    right: 40px; /* Moves left in English */
-  }
-
-  .zenith-rtl .zenith-typewriter-text,
-  .zenith-rtl .zenith-typewriter-cursor {
-    position: relative;
-    left: 40px; /* Moves right in Arabic */
-  }
-}
-
-/* --- Breakpoint: 480px (Mobile) --- */
-@media (max-width: 480px) {
-  .zenith-main-title {
-    font-size: 2rem;
-  }
-
-  /* Reduce the offset on smaller screens to prevent clipping */
-  .zenith-ltr .zenith-typewriter-text,
-  .zenith-ltr .zenith-typewriter-cursor {
-    right: 20px;
-  }
-  .zenith-rtl .zenith-typewriter-text,
-  .zenith-rtl .zenith-typewriter-cursor {
-    left: 20px;
-  }
-
-  .zenith-cta-btn {
-    padding: 0.9rem 1.5rem;
-  }
-}
-
-/* --- Breakpoint: 340px (Small Mobile) --- */
-@media (max-width: 340px) {
-  .zenith-main-title {
-    font-size: 1.7rem;
-  }
-
-  /* Remove offsets entirely on tiny screens to avoid horizontal overflow */
-  .zenith-typewriter-text,
-  .zenith-typewriter-cursor {
-    right: 0 !important;
+  .zenith-video-wrapper-full {
+    top: 0 !important;
     left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1;
   }
 
-  .zenith-sub-text {
+  .zenith-video-element-full {
+    width: 100vw;
+    height: 100svh;
+    object-fit: cover;
+  }
+  
+  /* Ensure content is centered on mobile without desktop offsets */
+  .zenith-content-center {
+    left: 0 !important;
+    padding: 0 5%;
+    bottom: 150px;
+  }
+  
+  .zenith-expand-reveal {
+    right: 0 !important;
+  }
+
+    .title-static {
+    font-size: 30px;
+  }
+
+ 
+  .zenith-typewriter-text-clean {
+    font-size: 20px;
+  }
+
+    .zenith-social-grid-vertical {
+    flex-direction: row !important; 
+    justify-content: center;        
+    gap: 20px;                      
+    position: absolute;
+    bottom: 10px;                   
+    left: 50%;
+    transform: translateX(-50%);    
+    width: auto;
+    height: auto;
+  }
+
+    .zenith-social-sidebar-reveal {
+    right: auto !important;
+    left: 50% !important;
+    bottom: 100px;
+    transform: translateX(-50%);
+  }
+
+}
+
+/* Mobile Large (480px) */
+@media (max-width: 480px) {
+ 
+  .zenith-cta-btn {
+    padding: 0.8rem 1.8rem;
     font-size: 0.9rem;
-    padding: 0 10px;
+  }
+  .zenith-social-item {
+    width: 40px;
+    height: 40px;
   }
 }
 
-[dir="rtl"] .zenith-btn-arrow {
-  transform: rotate(180deg);
-  transition: 0.3s ease;
+/* Mobile Small (340px) */
+@media (max-width: 340px) {
+  .title-static,
+  .zenith-typewriter-text-clean {
+    font-size: 28px;
+  }
+  .subtitle-static-zenith {
+    font-size: 13px;
+  }
 }
 
-[dir="rtl"] .zenith-cta-btn:hover .zenith-btn-arrow {
-  transform: rotate(180deg) translateX(6px);
+/* --- Animations --- */
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
-/* model for whatsapp and telegram */
+@keyframes fadeInVideo {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
-/* --- Modal Styles --- */
-.zenith-modal-overlay {
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --- Redesigned Zenith Horizontal Modal --- */
+.mm-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 9999;
-  animation: zenithFadeIn 0.3s ease;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.4s ease-out;
 }
 
-.zenith-modal-content {
+.mm-modal-content {
   background: #1a1a1a;
-  padding: 2rem;
-  border-radius: 15px;
-  border: 1px solid var(--accent-1);
+  padding: 40px 30px;
+ 
+  border: 1px solid rgba(38, 170, 135, 0.3);
   text-align: center;
-  min-width: 300px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  width: auto;
+  min-width: 350px;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  animation: zenithPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.zenith-modal-content h3 {
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+.mm-modal-content h3 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  opacity: 0.9;
 }
 
-.zenith-contact-row {
+/* Horizontal Container with Line */
+.mm-horizontal-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
-  background: #262626;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 15px 25px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.zenith-flag {
-  font-size: 1.5rem;
-}
-
-.zenith-number {
-  color: var(--text-secondary);
-  font-family: monospace;
-  font-size: 1.1rem;
-}
-
-.zenith-copy-btn {
-  background: var(--accent-1);
-  border: none;
-  padding: 5px 12px;
-  border-radius: 5px;
-  cursor: pointer;
+.mm-number-text {
+  font-size: 1.4rem;
   font-weight: 600;
-  transition: 0.3s;
+  color: #26aa87;
+  font-family: 'Inter', monospace;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+@media (max-width: 768px) {
+  
+  .mm-number-text {
+    font-size: 0.9rem;
+  }
+
 }
 
-.zenith-copy-btn:hover {
-  filter: brightness(1.2);
+/* The Vertical Line */
+.mm-separator {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 5px;
 }
 
-.zenith-close-modal {
+/* Animated Copy Button */
+.mm-copy-btn-small {
   background: transparent;
-  border: 1px solid #444;
-  color: #888;
-  padding: 8px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.zenith-close-modal:hover {
-  color: white;
-  border-color: white;
-}
-
-
-
-
-/* Styling for the flag image in the modal */
-.zenith-flag-container {
+  color: #26aa87;
+  border: 1px solid rgba(38, 170, 135, 0.5);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px; /* Adjust size as needed */
-  height: 20px;
-  overflow: hidden;
-  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.zenith-modal-flag-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.mm-copy-btn-small:hover {
+  background: rgba(38, 170, 135, 0.1);
+  transform: translateY(-2px);
 }
 
-/* Adjust the contact row gap if needed */
-.zenith-contact-row {
-  gap: 12px;
+.mm-copy-btn-small.copied {
+  background: #26aa87;
+  color: #121212;
+  border-color: #26aa87;
+  transform: scale(1.05);
 }
+
+/* Redesigned Close Button (Top Right) */
+/* Ensure the close button is on top of everything inside the modal */
+.mm-close-x {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10001; /* Higher than content */
+  cursor: pointer !important;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.mm-close-x:hover {
+  background: rgba(255, 77, 77, 0.2);
+  color: #ff4d4d;
+  transform: rotate(90deg);
+}
+
+/* Copy button animation when icon changes */
+.zenith-icon-animate {
+  animation: iconPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes iconPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Added to ensure the separator is visible */
+.mm-separator {
+  width: 1px;
+  height: 25px;
+  background: linear-gradient(to bottom, transparent, rgba(38, 170, 135, 0.5), transparent);
+  margin: 0 10px;
+}
+
+@keyframes zenithPop {
+  0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+
+
+
+
+
